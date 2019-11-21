@@ -33,7 +33,7 @@ def create_app(test_config=None):
     def index():
         return jsonify({'status': 'up'})
 
-    from . import show
-    app.register_blueprint(show.bp)
+    from . import shows
+    app.register_blueprint(shows.bp)
 
     return app

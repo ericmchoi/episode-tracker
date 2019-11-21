@@ -4,7 +4,7 @@ from api.db import get_db
 from werkzeug.exceptions import abort
 
 
-bp = Blueprint('show', __name__)
+bp = Blueprint('shows', __name__)
 
 
 def get_show_from_db(id):
