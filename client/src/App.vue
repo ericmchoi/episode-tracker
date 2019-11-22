@@ -102,7 +102,13 @@
 
 <script>
 import AddShowForm from './components/AddShowForm.vue';
-import api from './api/localStorage';
+import localStorageAPI from './api/localStorage';
+
+const DEFAULT_SETTINGS = {
+  type: 'local',
+  url: '',
+  key: '',
+};
 
 export default {
   columns: [
@@ -124,25 +130,41 @@ export default {
   },
   methods: {
     addShow(info) {
-      api.addShow(info);
+      this.api.addShow(info);
 
-      this.shows = api.getShows();
+      this.shows = this.api.getShows();
     },
     deleteShow(id) {
       console.log(`deleting: ${id}`);
-      api.deleteShow(id);
+      this.api.deleteShow(id);
 
       this.isDeleteShowModalActive = false;
-      this.shows = api.getShows();
+      this.shows = this.api.getShows();
     },
     incrementEpisodeCount(id, lastEp) {
-      api.editShow(id, { lastEpisode: lastEp + 1 });
+      this.api.editShow(id, { lastEpisode: lastEp + 1 });
 
-      this.shows = api.getShows();
+      this.shows = this.api.getShows();
+    },
+    loadSettings() {
+      try {
+        this.settings = JSON.parse(window.localStorage.getItem('settings')) || DEFAULT_SETTINGS;
+      } catch {
+        this.settings = DEFAULT_SETTINGS;
+      }
+
+      if (this.settings.type === 'local') {
+        this.api = localStorageAPI;
+      }
+    },
+    saveSettings() {
+      window.localStorage.setItem('settings', JSON.stringify(this.settings));
     },
   },
-  mounted() {
-    this.shows = api.getShows();
+  created() {
+    this.settings = DEFAULT_SETTINGS;
+    this.loadSettings();
+    this.shows = this.api.getShows();
   },
   computed: {
     displayedShows() {
