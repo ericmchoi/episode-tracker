@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 
 def create_app(test_config=None):
@@ -11,6 +12,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         API_KEY='test',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        ALLOW_CORS=None,
     )
 
     if test_config is None:
@@ -22,6 +24,9 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    if app.config['ALLOW_CORS']:
+        CORS(app, origins=app.config['ALLOW_CORS'])
 
     from . import db
     db.init_app(app)
