@@ -1,29 +1,41 @@
 const uuid = require('uuid/v1');
 
-export default {
-  getShows() {
-    const shows = JSON.parse(window.localStorage.getItem('shows'));
+export default () => {
+  let shows = [];
 
-    return shows || [];
-  },
-  addShow(info) {
-    const shows = this.getShows();
+  try {
+    shows = JSON.parse(window.localStorage.getItem('shows')) || [];
+  } catch {
+    shows = [];
+  }
 
+  const saveShows = () => window.localStorage.setItem('shows', JSON.stringify(shows));
+
+  const getShows = () => new Promise((resolve) => { resolve([...shows]); });
+
+  const addShow = info => new Promise((resolve) => {
     shows.push({ id: uuid(), ...info });
-    window.localStorage.setItem('shows', JSON.stringify(shows));
-  },
-  deleteShow(id) {
-    let shows = this.getShows();
+    saveShows();
+    resolve();
+  });
 
+  const deleteShow = id => new Promise((resolve) => {
     shows = shows.filter(show => show.id !== id);
-    window.localStorage.setItem('shows', JSON.stringify(shows));
-  },
-  editShow(id, info) {
-    const shows = this.getShows();
+    saveShows();
+    resolve();
+  });
 
+  const editShow = (id, info) => new Promise((resolve) => {
     const idx = shows.findIndex(show => show.id === id);
-
     shows[idx] = { ...shows[idx], ...info };
-    window.localStorage.setItem('shows', JSON.stringify(shows));
-  },
+    saveShows();
+    resolve();
+  });
+
+  return {
+    getShows,
+    addShow,
+    deleteShow,
+    editShow,
+  };
 };

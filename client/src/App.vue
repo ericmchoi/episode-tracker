@@ -130,21 +130,26 @@ export default {
   },
   methods: {
     addShow(info) {
-      this.api.addShow(info);
-
-      this.shows = this.api.getShows();
+      this.api.addShow(info)
+        .then(() => { this.loadShows(); })
+        .catch(err => console.error(err));
     },
     deleteShow(id) {
       console.log(`deleting: ${id}`);
-      this.api.deleteShow(id);
-
       this.isDeleteShowModalActive = false;
-      this.shows = this.api.getShows();
+      this.api.deleteShow(id)
+        .then(() => { this.loadShows(); })
+        .catch(err => console.error(err));
     },
     incrementEpisodeCount(id, lastEp) {
-      this.api.editShow(id, { lastEpisode: lastEp + 1 });
-
-      this.shows = this.api.getShows();
+      this.api.editShow(id, { lastEpisode: lastEp + 1 })
+        .then(() => this.loadShows())
+        .catch(err => console.error(err));
+    },
+    loadShows() {
+      this.api.getShows()
+        .then((shows) => { console.log(shows); this.shows = shows; })
+        .catch(err => console.error(err));
     },
     loadSettings() {
       try {
@@ -154,7 +159,7 @@ export default {
       }
 
       if (this.settings.type === 'local') {
-        this.api = localStorageAPI;
+        this.api = localStorageAPI();
       }
     },
     saveSettings() {
@@ -164,7 +169,7 @@ export default {
   created() {
     this.settings = DEFAULT_SETTINGS;
     this.loadSettings();
-    this.shows = this.api.getShows();
+    this.loadShows();
   },
   computed: {
     displayedShows() {
