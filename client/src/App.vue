@@ -52,7 +52,7 @@
               <b-button
                 type="is-text"
                 size="is-small"
-                @click="incrementEpisodeCount(props.row.id, props.row.lastEpisode)"
+                @click="incrementEpisodeCount(props.row)"
               >
                 <b-icon icon="plus"></b-icon>
               </b-button>
@@ -142,8 +142,8 @@ export default {
         .then(() => { this.loadShows(); })
         .catch(err => console.error(err));
     },
-    incrementEpisodeCount(id, lastEp) {
-      this.api.editShow(id, { lastEpisode: lastEp + 1 })
+    incrementEpisodeCount(show) {
+      this.api.editShow(show.id, { ...show, lastEpisode: show.lastEpisode + 1 })
         .then(() => this.loadShows())
         .catch(err => console.error(err));
     },
