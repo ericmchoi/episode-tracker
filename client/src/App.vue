@@ -22,6 +22,7 @@
         :columns="displayedShows.length ? [] : $options.columns"
         detailed
         detail-key="id"
+        custom-row-key="id"
         :opened-detailed="openedShow"
         :show-detail-icon="false"
       >
