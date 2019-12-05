@@ -15,6 +15,11 @@
           <div class="level-item">
             <b-button @click="isAddShowModalActive = true">Add Show</b-button>
           </div>
+          <div class="level-item">
+            <b-button @click="() => openSettingsModal()">
+              <b-icon icon="settings"></b-icon>
+            </b-button>
+          </div>
         </div>
       </nav>
       <show-table
@@ -55,11 +60,13 @@
 
 <script>
 import AddShowForm from './components/AddShowForm.vue';
+import SettingsForm from './components/SettingsForm.vue';
 import ShowTable from './components/ShowTable.vue';
 import localStorageAPI from './api/localStorage';
+import remoteAPI from './api/remote';
 
 const DEFAULT_SETTINGS = {
-  type: 'local',
+  isRemote: false,
   url: '',
   key: '',
 };
@@ -104,16 +111,34 @@ export default {
         .catch(err => console.error(err));
     },
     loadSettings() {
-      if (this.settings.type === 'local') {
+      if (this.settings.isRemote) {
+        this.api = remoteAPI(this.settings.url, this.settings.key);
+      } else {
         this.api = localStorageAPI();
       }
     },
-    saveSettings() {
+    saveSettings(settings) {
+      this.settings = settings || DEFAULT_SETTINGS;
       window.localStorage.setItem('settings', JSON.stringify(this.settings));
+
+      this.loadSettings();
+      this.loadShows();
     },
     confirmDelete(show) {
       this.focusedShow = show;
       this.isDeleteShowModalActive = true;
+    },
+    openSettingsModal() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: SettingsForm,
+        props: {
+          prefill: this.settings,
+        },
+        events: {
+          'save-settings': this.saveSettings,
+        },
+      });
     },
   },
   created() {
