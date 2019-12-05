@@ -17,82 +17,34 @@
           </div>
         </div>
       </nav>
-      <b-table
-        :data="displayedShows"
-        :columns="displayedShows.length ? [] : $options.columns"
-        detailed
-        detail-key="id"
-        custom-row-key="id"
-        :opened-detailed="openedShow"
-        :show-detail-icon="false"
+      <show-table
+        :show-data="displayedShows"
+        :confirm-delete="confirmDelete"
+        :increment-episode="incrementEpisode"
+      ></show-table>
+      <b-modal
+        :active.sync="isAddShowModalActive"
+        scroll="keep"
+        :can-cancel="['escape', 'x']"
       >
-        <template slot-scope="props">
-          <b-table-column field="title" label="Title">
-            <span v-if="props.row.link.length">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                :href="props.row.link"
-              >{{ props.row.title }}</a>
-            </span>
-            <span v-else>{{ props.row.title }}</span>
-          </b-table-column>
-          <b-table-column field="lastEpisode" label="Episodes" width="500">
-            <b-progress
-              class="progress-bar"
-              type="is-primary"
-              size="is-medium"
-              show-value
-              :value="props.row.lastEpisode"
-              :max="props.row.totalEpisodes"
-            >{{ props.row.lastEpisode }} / {{ props.row.totalEpisodes }}</b-progress>
-          </b-table-column>
-          <b-table-column label="Actions" width="140" numeric>
-            <div class="buttons is-right">
-              <b-button
-                type="is-text"
-                size="is-small"
-                @click="incrementEpisodeCount(props.row)"
-              >
-                <b-icon icon="plus"></b-icon>
-              </b-button>
-              <b-button type="is-text" size="is-small" @click="openedShow = [props.row.id]">
-                <b-icon icon="pencil-box-multiple"></b-icon>
-              </b-button>
-              <b-button
-                type="is-text"
-                size="is-small"
-                @click="focusedShow = props.row; isDeleteShowModalActive = true"
-              >
-                <b-icon icon="delete"></b-icon>
-              </b-button>
-            </div>
-          </b-table-column>
-        </template>
-
-        <template slot="detail">Coming Soon.</template>
-
-        <template slot="empty">
-          <section class="section">
-            <div class="content has-text-grey has-text-centered">
-              <p>
-                <b-icon icon="emoticon-sad" size="is-large"></b-icon>
-              </p>
-              <p>Nothing here.</p>
-            </div>
-          </section>
-        </template>
-      </b-table>
-      <b-modal :active.sync="isAddShowModalActive" scroll="keep" :can-cancel="['escape', 'x']">
         <div class="box">
           <add-show-form @add-show="addShow" />
         </div>
       </b-modal>
-      <b-modal :active.sync="isDeleteShowModalActive" scroll="keep" :can-cancel="['escape', 'x']">
+      <b-modal
+        :active.sync="isDeleteShowModalActive"
+        scroll="keep"
+        :can-cancel="['escape', 'x']"
+      >
         <div class="box">
-          <div class="content">Are you sure you want to delete "{{ focusedShow.title }}"?</div>
+          <div
+            class="content"
+          >Are you sure you want to delete "{{ focusedShow.title }}"?</div>
           <div class="buttons">
-            <b-button type="is-danger" @click="deleteShow(focusedShow.id)">Delete</b-button>
+            <b-button
+              type="is-danger"
+              @click="deleteShow(focusedShow.id)"
+            >Delete</b-button>
             <b-button @click="isDeleteShowModalActive = false">Cancel</b-button>
           </div>
         </div>
@@ -103,6 +55,7 @@
 
 <script>
 import AddShowForm from './components/AddShowForm.vue';
+import ShowTable from './components/ShowTable.vue';
 import localStorageAPI from './api/localStorage';
 
 const DEFAULT_SETTINGS = {
@@ -112,53 +65,45 @@ const DEFAULT_SETTINGS = {
 };
 
 export default {
-  columns: [
-    { label: 'Title' },
-    { label: 'Episodes' },
-    { label: 'Actions' },
-  ],
   name: 'app',
-  components: { AddShowForm },
+  components: { AddShowForm, ShowTable },
   data() {
     return {
       isAddShowModalActive: false,
       isDeleteShowModalActive: false,
-      openedShow: [],
       focusedShow: {},
       shows: [],
       filterQuery: '',
     };
   },
   methods: {
-    addShow(info) {
-      this.api.addShow(info)
+    addShow(show) {
+      this.api
+        .addShow(show)
         .then(() => { this.loadShows(); })
         .catch(err => console.error(err));
     },
     deleteShow(id) {
       console.log(`deleting: ${id}`);
       this.isDeleteShowModalActive = false;
-      this.api.deleteShow(id)
+      this.api
+        .deleteShow(id)
         .then(() => { this.loadShows(); })
         .catch(err => console.error(err));
     },
-    incrementEpisodeCount(show) {
-      this.api.editShow(show.id, { ...show, lastEpisode: show.lastEpisode + 1 })
+    incrementEpisode(show) {
+      this.api
+        .editShow(show.id, { ...show, lastEpisode: show.lastEpisode + 1 })
         .then(() => this.loadShows())
         .catch(err => console.error(err));
     },
     loadShows() {
-      this.api.getShows()
+      this.api
+        .getShows()
         .then((shows) => { console.log(shows); this.shows = shows; })
         .catch(err => console.error(err));
     },
     loadSettings() {
-      try {
-        this.settings = JSON.parse(window.localStorage.getItem('settings')) || DEFAULT_SETTINGS;
-      } catch {
-        this.settings = DEFAULT_SETTINGS;
-      }
-
       if (this.settings.type === 'local') {
         this.api = localStorageAPI();
       }
@@ -166,9 +111,18 @@ export default {
     saveSettings() {
       window.localStorage.setItem('settings', JSON.stringify(this.settings));
     },
+    confirmDelete(show) {
+      this.focusedShow = show;
+      this.isDeleteShowModalActive = true;
+    },
   },
   created() {
-    this.settings = DEFAULT_SETTINGS;
+    try {
+      this.settings = JSON.parse(window.localStorage.getItem('settings')) || DEFAULT_SETTINGS;
+    } catch {
+      this.settings = DEFAULT_SETTINGS;
+    }
+
     this.loadSettings();
     this.loadShows();
   },
