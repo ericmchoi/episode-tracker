@@ -9,7 +9,10 @@
     :show-detail-icon="false"
   >
     <template slot-scope="props">
-      <b-table-column field="title" label="Title">
+      <b-table-column
+        field="title"
+        label="Title"
+      >
         <span v-if="props.row.link.length">
           <a
             target="_blank"
@@ -19,7 +22,11 @@
         </span>
         <span v-else>{{ props.row.title }}</span>
       </b-table-column>
-      <b-table-column field="lastEpisode" label="Episodes" width="500">
+      <b-table-column
+        field="lastEpisode"
+        label="Episodes"
+        width="500"
+      >
         <b-progress
           class="progress-bar"
           type="is-primary"
@@ -29,12 +36,16 @@
           :max="props.row.totalEpisodes"
         >{{ props.row.lastEpisode }} / {{ props.row.totalEpisodes }}</b-progress>
       </b-table-column>
-      <b-table-column label="Actions" width="140" numeric>
+      <b-table-column
+        label="Actions"
+        width="140"
+        numeric
+      >
         <div class="buttons is-right">
           <b-button
             type="is-text"
             size="is-small"
-            @click="incrementEpisode(props.row)"
+            @click="$emit('increment-episode', props.row)"
           >
             <b-icon icon="plus"></b-icon>
           </b-button>
@@ -48,7 +59,7 @@
           <b-button
             type="is-text"
             size="is-small"
-            @click="confirmDelete(props.row)"
+            @click="$emit('confirm-delete', props.row)"
           >
             <b-icon icon="delete"></b-icon>
           </b-button>
@@ -62,7 +73,10 @@
       <section class="section">
         <div class="content has-text-grey has-text-centered">
           <p>
-            <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+            <b-icon
+              icon="emoticon-sad"
+              size="is-large"
+            ></b-icon>
           </p>
           <p>Nothing here.</p>
         </div>

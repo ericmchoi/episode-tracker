@@ -13,7 +13,7 @@
             ></b-input>
           </div>
           <div class="level-item">
-            <b-button @click="isAddShowModalActive = true">Add Show</b-button>
+            <b-button @click="openAddShowModal()">Add Show</b-button>
           </div>
           <div class="level-item">
             <b-button @click="() => openSettingsModal()">
@@ -24,36 +24,9 @@
       </nav>
       <show-table
         :show-data="displayedShows"
-        :confirm-delete="confirmDelete"
-        :increment-episode="incrementEpisode"
+        @confirm-delete="openConfirmDeleteModal"
+        @increment-episode="incrementEpisode"
       ></show-table>
-      <b-modal
-        :active.sync="isAddShowModalActive"
-        scroll="keep"
-        :can-cancel="['escape', 'x']"
-      >
-        <div class="box">
-          <add-show-form @add-show="addShow" />
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isDeleteShowModalActive"
-        scroll="keep"
-        :can-cancel="['escape', 'x']"
-      >
-        <div class="box">
-          <div
-            class="content"
-          >Are you sure you want to delete "{{ focusedShow.title }}"?</div>
-          <div class="buttons">
-            <b-button
-              type="is-danger"
-              @click="deleteShow(focusedShow.id)"
-            >Delete</b-button>
-            <b-button @click="isDeleteShowModalActive = false">Cancel</b-button>
-          </div>
-        </div>
-      </b-modal>
     </div>
   </section>
 </template>
@@ -61,7 +34,9 @@
 <script>
 import AddShowForm from './components/AddShowForm.vue';
 import SettingsForm from './components/SettingsForm.vue';
+import ConfirmDeleteForm from './components/ConfirmDeleteForm.vue';
 import ShowTable from './components/ShowTable.vue';
+
 import localStorageAPI from './api/localStorage';
 import remoteAPI from './api/remote';
 
@@ -73,11 +48,9 @@ const DEFAULT_SETTINGS = {
 
 export default {
   name: 'app',
-  components: { AddShowForm, ShowTable },
+  components: { ShowTable },
   data() {
     return {
-      isAddShowModalActive: false,
-      isDeleteShowModalActive: false,
       focusedShow: {},
       shows: [],
       filterQuery: '',
@@ -124,10 +97,6 @@ export default {
       this.loadSettings();
       this.loadShows();
     },
-    confirmDelete(show) {
-      this.focusedShow = show;
-      this.isDeleteShowModalActive = true;
-    },
     openSettingsModal() {
       this.$buefy.modal.open({
         parent: this,
@@ -137,6 +106,25 @@ export default {
         },
         events: {
           'save-settings': this.saveSettings,
+        },
+      });
+    },
+    openAddShowModal() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: AddShowForm,
+        events: {
+          'add-show': this.addShow,
+        },
+      });
+    },
+    openConfirmDeleteModal(show) {
+      this.$buefy.modal.open({
+        parent: this,
+        component: ConfirmDeleteForm,
+        props: { show },
+        events: {
+          'delete-show': this.deleteShow,
         },
       });
     },
