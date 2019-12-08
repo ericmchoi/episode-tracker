@@ -72,8 +72,11 @@ export default {
         .catch(err => console.error(err));
     },
     incrementEpisode(show) {
+      const lastEpisode = show.lastEpisode + 1;
+      const totalEpisodes = lastEpisode > show.totalEpisodes ? lastEpisode : show.totalEpisodes;
+
       this.api
-        .editShow(show.id, { ...show, lastEpisode: show.lastEpisode + 1 })
+        .editShow(show.id, { ...show, lastEpisode, totalEpisodes })
         .then(() => this.loadShows())
         .catch(err => console.error(err));
     },
