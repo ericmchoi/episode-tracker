@@ -33,11 +33,11 @@
             type="is-primary"
             tag="input"
             native-type="submit"
-            value="Submit"
+            value="Save"
           />
         </p>
         <p class="control">
-          <b-button @click="$parent.close()">Close</b-button>
+          <b-button @click="closeForm">Close</b-button>
         </p>
       </b-field>
     </form>
@@ -63,7 +63,10 @@ export default {
       };
 
       this.$emit('save-settings', settings);
-      this.$parent.close();
+    },
+    closeForm() {
+      this.$emit('load-shows');
+      this.$emit('close');
     },
   },
 };

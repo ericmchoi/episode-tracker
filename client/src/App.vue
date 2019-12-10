@@ -61,15 +61,18 @@ export default {
       this.api
         .addShow(show)
         .then(() => { this.loadShows(); })
-        .catch(err => console.error(err));
+        .catch(() => {
+          this.openErrorSnackbar('Unable to perform action. Please check your API settings.');
+        });
     },
     deleteShow(id) {
-      console.log(`deleting: ${id}`);
       this.isDeleteShowModalActive = false;
       this.api
         .deleteShow(id)
         .then(() => { this.loadShows(); })
-        .catch(err => console.error(err));
+        .catch(() => {
+          this.openErrorSnackbar('Unable to perform action. Please check your API settings.');
+        });
     },
     incrementEpisode(show) {
       const lastEpisode = show.lastEpisode + 1;
@@ -78,13 +81,19 @@ export default {
       this.api
         .editShow(show.id, { ...show, lastEpisode, totalEpisodes })
         .then(() => this.loadShows())
-        .catch(err => console.error(err));
+        .catch(() => {
+          this.openErrorSnackbar('Unable to perform action. Please check your API settings.');
+        });
     },
     loadShows() {
       this.api
         .getShows()
-        .then((shows) => { console.log(shows); this.shows = shows; })
-        .catch(err => console.error(err));
+        .then((shows) => {
+          this.shows = shows;
+        })
+        .catch(() => {
+          this.openErrorSnackbar('Unable to retrieve shows. Please check your API settings.');
+        });
     },
     loadSettings() {
       if (this.settings.isRemote) {
@@ -98,17 +107,23 @@ export default {
       window.localStorage.setItem('settings', JSON.stringify(this.settings));
 
       this.loadSettings();
-      this.loadShows();
+      this.$buefy.toast.open({
+        message: 'Settings saved.',
+        position: 'is-top',
+      });
     },
     openSettingsModal() {
+      this.closeSnackbar();
       this.$buefy.modal.open({
         parent: this,
         component: SettingsForm,
+        onCancel: this.loadShows,
         props: {
           prefill: this.settings,
         },
         events: {
           'save-settings': this.saveSettings,
+          'load-shows': this.loadShows,
         },
       });
     },
@@ -122,6 +137,7 @@ export default {
       });
     },
     openConfirmDeleteModal(show) {
+      this.closeSnackbar();
       this.$buefy.modal.open({
         parent: this,
         component: ConfirmDeleteForm,
@@ -130,6 +146,22 @@ export default {
           'delete-show': this.deleteShow,
         },
       });
+    },
+    openErrorSnackbar(message) {
+      this.closeSnackbar();
+      this.currentSnackbar = this.$buefy.snackbar.open({
+        message,
+        type: 'is-danger',
+        position: 'is-top',
+        actionText: 'Settings',
+        indefinite: true,
+        onAction: this.openSettingsModal,
+      });
+    },
+    closeSnackbar() {
+      if (this.currentSnackbar) {
+        this.currentSnackbar.close();
+      }
     },
   },
   created() {
