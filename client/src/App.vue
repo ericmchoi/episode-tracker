@@ -25,6 +25,7 @@
       <show-table
         :show-data="displayedShows"
         @confirm-delete="openConfirmDeleteModal"
+        @edit-show="editShow"
         @increment-episode="incrementEpisode"
       ></show-table>
     </div>
@@ -70,6 +71,14 @@ export default {
       this.api
         .deleteShow(id)
         .then(() => { this.loadShows(); })
+        .catch(() => {
+          this.openErrorSnackbar('Unable to perform action. Please check your API settings.');
+        });
+    },
+    editShow(id, show) {
+      this.api
+        .editShow(id, show)
+        .then(() => this.loadShows())
         .catch(() => {
           this.openErrorSnackbar('Unable to perform action. Please check your API settings.');
         });

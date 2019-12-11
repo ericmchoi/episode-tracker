@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <h1 class="title">Add Show</h1>
     <form @submit.prevent="submitForm">
       <b-field label="Show Title *">
         <b-input
@@ -9,19 +10,27 @@
           required
         />
       </b-field>
-      <b-field label="Last Watched Episode *">
-        <b-numberinput
-          v-model="lastEpisode"
-          min="0"
-          required
-        ></b-numberinput>
-      </b-field>
-      <b-field label="Total # of Episodes *">
-        <b-numberinput
-          v-model="totalEpisodes"
-          min="0"
-          required
-        ></b-numberinput>
+      <b-field grouped>
+        <b-field
+          label="Last Watched Episode *"
+          expanded
+        >
+          <b-numberinput
+            v-model="lastEpisode"
+            min="0"
+            required
+          ></b-numberinput>
+        </b-field>
+        <b-field
+          label="Total # of Episodes *"
+          expanded
+        >
+          <b-numberinput
+            v-model="totalEpisodes"
+            min="0"
+            required
+          ></b-numberinput>
+        </b-field>
       </b-field>
       <b-field label="Link">
         <b-input

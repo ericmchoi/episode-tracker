@@ -52,7 +52,7 @@
           <b-button
             type="is-text"
             size="is-small"
-            @click="openedShow = [props.row.id]"
+            @click="toggleOpenedShow(props.row.id)"
           >
             <b-icon icon="pencil-box-multiple"></b-icon>
           </b-button>
@@ -67,7 +67,16 @@
       </b-table-column>
     </template>
 
-    <template slot="detail">Coming Soon.</template>
+    <template
+      slot="detail"
+      slot-scope="props"
+    >
+      <edit-show-form
+        :prefill="props.row"
+        @close-form="() => openedShow = []"
+        @edit-show="handleEdit"
+      />
+    </template>
 
     <template slot="empty">
       <section class="section">
@@ -86,8 +95,11 @@
 </template>
 
 <script>
+import EditShowForm from './EditShowForm.vue';
+
 export default {
   name: 'ShowTable',
+  components: { EditShowForm },
   columns: [{ label: 'Title' }, { label: 'Episodes' }, { label: 'Actions' }],
   props: {
     showData: Array,
@@ -98,6 +110,20 @@ export default {
     return {
       openedShow: [],
     };
+  },
+  methods: {
+    toggleOpenedShow(id) {
+      if (this.openedShow.length && this.openedShow[0] === id) {
+        this.openedShow = [];
+      } else {
+        this.openedShow = [id];
+      }
+    },
+    handleEdit(id, show) {
+      this.openedShow = [];
+
+      this.$emit('edit-show', id, show);
+    },
   },
 };
 </script>
