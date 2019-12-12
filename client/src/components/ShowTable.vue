@@ -42,27 +42,33 @@
         numeric
       >
         <div class="buttons is-right">
-          <b-button
-            type="is-text"
-            size="is-small"
-            @click="$emit('increment-episode', props.row)"
-          >
-            <b-icon icon="plus"></b-icon>
-          </b-button>
-          <b-button
-            type="is-text"
-            size="is-small"
-            @click="toggleOpenedShow(props.row.id)"
-          >
-            <b-icon icon="pencil-box-multiple"></b-icon>
-          </b-button>
-          <b-button
-            type="is-text"
-            size="is-small"
-            @click="$emit('confirm-delete', props.row)"
-          >
-            <b-icon icon="delete"></b-icon>
-          </b-button>
+          <b-tooltip label="Increment">
+            <b-button
+              type="is-text"
+              size="is-small"
+              @click="$emit('increment-episode', props.row)"
+            >
+              <b-icon icon="plus"></b-icon>
+            </b-button>
+          </b-tooltip>
+          <b-tooltip label="Edit">
+            <b-button
+              type="is-text"
+              size="is-small"
+              @click="toggleOpenedShow(props.row.id)"
+            >
+              <b-icon icon="pencil-box-multiple"></b-icon>
+            </b-button>
+          </b-tooltip>
+          <b-tooltip label="Delete">
+            <b-button
+              type="is-text"
+              size="is-small"
+              @click="$emit('confirm-delete', props.row)"
+            >
+              <b-icon icon="delete"></b-icon>
+            </b-button>
+          </b-tooltip>
         </div>
       </b-table-column>
     </template>
