@@ -48,7 +48,7 @@
               size="is-small"
               @click="$emit('increment-episode', show)"
             >
-              <b-icon icon="plus"></b-icon>
+              <b-icon icon="plus" />
             </b-button>
           </b-tooltip>
           <b-tooltip label="Edit">
@@ -57,7 +57,7 @@
               size="is-small"
               @click="toggleOpenedShow(show.id)"
             >
-              <b-icon icon="pencil-box-multiple"></b-icon>
+              <b-icon icon="pencil-box-multiple" />
             </b-button>
           </b-tooltip>
           <b-tooltip label="Delete">
@@ -66,7 +66,7 @@
               size="is-small"
               @click="$emit('confirm-delete', show)"
             >
-              <b-icon icon="delete"></b-icon>
+              <b-icon icon="delete" />
             </b-button>
           </b-tooltip>
         </div>
@@ -91,7 +91,7 @@
             <b-icon
               icon="emoticon-sad"
               size="is-large"
-            ></b-icon>
+            />
           </p>
           <p>Nothing here.</p>
         </div>

@@ -29,7 +29,7 @@
           type
           min="0"
           required
-        ></b-numberinput>
+        />
       </b-field>
       <b-field
         label="Total # of Episodes *"
@@ -41,7 +41,7 @@
           type
           min="0"
           required
-        ></b-numberinput>
+        />
       </b-field>
     </b-field>
     <b-field

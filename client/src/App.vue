@@ -10,14 +10,14 @@
               type="search"
               icon="magnify"
               v-model.lazy="filterQuery"
-            ></b-input>
+            />
           </div>
           <div class="level-item">
             <b-button @click="openAddShowModal()">Add Show</b-button>
           </div>
           <div class="level-item">
             <b-button @click="() => openSettingsModal()">
-              <b-icon icon="settings"></b-icon>
+              <b-icon icon="settings" />
             </b-button>
           </div>
         </div>
@@ -27,7 +27,7 @@
         @confirm-delete="openConfirmDeleteModal"
         @edit-show="editShow"
         @increment-episode="incrementEpisode"
-      ></show-table>
+      />
     </div>
   </section>
 </template>
