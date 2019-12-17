@@ -8,19 +8,19 @@
     :opened-detailed="openedShow"
     :show-detail-icon="false"
   >
-    <template slot-scope="props">
+    <template slot-scope="{ row: show }">
       <b-table-column
         field="title"
         label="Title"
       >
-        <span v-if="props.row.link.length">
+        <span v-if="show.link.length">
           <a
             target="_blank"
             rel="noopener noreferrer"
-            :href="props.row.link"
-          >{{ props.row.title }}</a>
+            :href="show.link"
+          >{{ show.title }}</a>
         </span>
-        <span v-else>{{ props.row.title }}</span>
+        <span v-else>{{ show.title }}</span>
       </b-table-column>
       <b-table-column
         field="lastEpisode"
@@ -32,9 +32,9 @@
           type="is-primary"
           size="is-medium"
           show-value
-          :value="props.row.lastEpisode"
-          :max="props.row.totalEpisodes"
-        >{{ props.row.lastEpisode }} / {{ props.row.totalEpisodes }}</b-progress>
+          :value="show.lastEpisode"
+          :max="show.totalEpisodes"
+        >{{ show.lastEpisode }} / {{ show.totalEpisodes }}</b-progress>
       </b-table-column>
       <b-table-column
         label="Actions"
@@ -46,7 +46,7 @@
             <b-button
               type="is-text"
               size="is-small"
-              @click="$emit('increment-episode', props.row)"
+              @click="$emit('increment-episode', show)"
             >
               <b-icon icon="plus"></b-icon>
             </b-button>
@@ -55,7 +55,7 @@
             <b-button
               type="is-text"
               size="is-small"
-              @click="toggleOpenedShow(props.row.id)"
+              @click="toggleOpenedShow(show.id)"
             >
               <b-icon icon="pencil-box-multiple"></b-icon>
             </b-button>
@@ -64,7 +64,7 @@
             <b-button
               type="is-text"
               size="is-small"
-              @click="$emit('confirm-delete', props.row)"
+              @click="$emit('confirm-delete', show)"
             >
               <b-icon icon="delete"></b-icon>
             </b-button>
@@ -75,10 +75,10 @@
 
     <template
       slot="detail"
-      slot-scope="props"
+      slot-scope="{ row: show }"
     >
       <edit-show-form
-        :prefill="props.row"
+        :prefill="show"
         @close-form="() => openedShow = []"
         @edit-show="handleEdit"
       />
