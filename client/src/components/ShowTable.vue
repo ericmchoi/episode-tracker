@@ -1,5 +1,6 @@
 <template>
   <b-table
+    class="show-table"
     :data="showData"
     :columns="showData.length ? [] : $options.columns"
     detailed
@@ -7,6 +8,7 @@
     custom-row-key="id"
     :opened-detailed="openedShow"
     :show-detail-icon="false"
+    :mobile-cards="false"
   >
     <template slot-scope="{ row: show }">
       <b-table-column
@@ -133,3 +135,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.show-table >>> .table-wrapper {
+  overflow-x: hidden;
+}
+</style>

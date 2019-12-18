@@ -1,35 +1,40 @@
 <template>
-  <section>
-    <div class="container">
-      <nav class="level header">
-        <div class="level-left"></div>
-        <div class="level-right">
-          <div class="level-item">
-            <b-input
-              placeholder="Filter..."
-              type="search"
-              icon="magnify"
-              v-model.lazy="filterQuery"
-            />
-          </div>
-          <div class="level-item">
+  <div>
+    <section>
+      <div class="app-controls container">
+        <b-field
+          position="is-right"
+          grouped
+          group-multiline
+        >
+          <b-input
+            placeholder="Filter..."
+            type="search"
+            icon="magnify"
+            v-model.lazy="filterQuery"
+          />
+          <p class="control">
             <b-button @click="openAddShowModal()">Add Show</b-button>
-          </div>
-          <div class="level-item">
+          </p>
+          <p class="control">
             <b-button @click="() => openSettingsModal()">
               <b-icon icon="settings" />
             </b-button>
-          </div>
-        </div>
-      </nav>
-      <show-table
-        :show-data="displayedShows"
-        @confirm-delete="openConfirmDeleteModal"
-        @edit-show="editShow"
-        @increment-episode="incrementEpisode"
-      />
-    </div>
-  </section>
+          </p>
+        </b-field>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <show-table
+          :show-data="displayedShows"
+          @confirm-delete="openConfirmDeleteModal"
+          @edit-show="editShow"
+          @increment-episode="incrementEpisode"
+        />
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -200,8 +205,8 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  padding: 10px;
+.app-controls {
+  padding: 0.75rem 0;
 }
 
 .progress-bar {
