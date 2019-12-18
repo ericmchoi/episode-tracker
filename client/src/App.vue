@@ -206,7 +206,13 @@ export default {
 
 <style scoped>
 .app-controls {
-  padding: 0.75rem 0;
+  padding: 0.75rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .app-controls {
+    padding: 0.75rem 0;
+  }
 }
 
 .progress-bar {
