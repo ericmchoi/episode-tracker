@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="handleSubmit">
       <div class="block">
         <b-radio
           v-model="isRemote"
@@ -55,7 +55,7 @@ export default {
     return { isRemote, url, key };
   },
   methods: {
-    submitForm() {
+    handleSubmit() {
       const settings = {
         isRemote: this.isRemote,
         url: this.url,

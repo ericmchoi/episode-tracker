@@ -83,7 +83,7 @@ const DEFAULT_ERRORS = {
 };
 
 export default {
-  name: 'AddShowForm',
+  name: 'EditShowForm',
   props: {
     prefill: Object,
   },
@@ -116,6 +116,8 @@ export default {
         errors.episode = 'Last watched episode must be less than or equal to the total.';
       }
 
+      // We want browser HTML5 form validation messages but not other default behaviors
+      // (eg. tooltips in Chrome)
       const titleInput = this.getInputByName('title');
       hasError = hasError || !titleInput.checkValidity();
       errors.title = titleInput.validationMessage;

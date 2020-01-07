@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="handleSubmit">
       <div class="content">Are you sure you want to delete "{{ show.title }}"?</div>
       <b-field grouped>
         <p class="control">
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'SettingsForm',
+  name: 'ConfirmDeleteForm',
   props: {
     show: {
       type: Object,
@@ -29,7 +29,7 @@ export default {
     },
   },
   methods: {
-    submitForm() {
+    handleSubmit() {
       this.$emit('delete-show', this.show.id);
       this.$parent.close();
     },

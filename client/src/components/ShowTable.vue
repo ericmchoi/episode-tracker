@@ -108,7 +108,6 @@ import EditShowForm from './EditShowForm.vue';
 export default {
   name: 'ShowTable',
   components: { EditShowForm },
-  columns: [{ label: 'Title' }, { label: 'Episodes' }, { label: 'Actions' }],
   props: {
     showData: Array,
     confirmDelete: Function,
@@ -119,6 +118,7 @@ export default {
       openedShow: [],
     };
   },
+  columns: [{ label: 'Title' }, { label: 'Episodes' }, { label: 'Actions' }],
   methods: {
     toggleOpenedShow(id) {
       if (this.openedShow.length && this.openedShow[0] === id) {
@@ -137,6 +137,7 @@ export default {
 </script>
 
 <style scoped>
+/* hides x scrollbar that appears for some reason in mobile view */
 .show-table >>> .table-wrapper {
   overflow-x: hidden;
 }

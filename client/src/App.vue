@@ -62,6 +62,29 @@ export default {
       filterQuery: '',
     };
   },
+  computed: {
+    displayedShows() {
+      if (this.filterQuery) {
+        return this.shows.filter((show) => {
+          const title = show.title.toLowerCase();
+          const query = this.filterQuery.toLowerCase();
+          return title.indexOf(query) !== -1;
+        });
+      }
+
+      return this.shows;
+    },
+  },
+  created() {
+    try {
+      this.settings = JSON.parse(window.localStorage.getItem('settings')) || DEFAULT_SETTINGS;
+    } catch {
+      this.settings = DEFAULT_SETTINGS;
+    }
+
+    this.loadSettings();
+    this.loadShows();
+  },
   methods: {
     addShow(show) {
       this.api
@@ -176,29 +199,6 @@ export default {
       if (this.currentSnackbar) {
         this.currentSnackbar.close();
       }
-    },
-  },
-  created() {
-    try {
-      this.settings = JSON.parse(window.localStorage.getItem('settings')) || DEFAULT_SETTINGS;
-    } catch {
-      this.settings = DEFAULT_SETTINGS;
-    }
-
-    this.loadSettings();
-    this.loadShows();
-  },
-  computed: {
-    displayedShows() {
-      if (this.filterQuery) {
-        return this.shows.filter((show) => {
-          const title = show.title.toLowerCase();
-          const query = this.filterQuery.toLowerCase();
-          return title.indexOf(query) !== -1;
-        });
-      }
-
-      return this.shows;
     },
   },
 };
