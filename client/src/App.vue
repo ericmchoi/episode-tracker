@@ -129,6 +129,7 @@ export default {
           this.shows = shows;
         })
         .catch(() => {
+          this.shows = [];
           this.openErrorSnackbar('Unable to retrieve shows. Please check your API settings.');
         });
     },
