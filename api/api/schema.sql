@@ -7,5 +7,3 @@ CREATE TABLE show (
     lastEpisode INTEGER NOT NULL,
     link TEXT
 );
-
-INSERT INTO show (title, totalEpisodes, lastEpisode, link) VALUES ('hello', 23, 11, 'https://www.google.com');
