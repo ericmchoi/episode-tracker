@@ -1,0 +1,2 @@
+include ep-tracker-api/schema.sql
+global-exclude *.pyc
