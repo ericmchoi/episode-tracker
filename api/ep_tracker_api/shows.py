@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
-from api.auth import key_required
-from api.db import get_db
+from ep_tracker_api.auth import key_required
+from ep_tracker_api.db import get_db
 from werkzeug.exceptions import abort
 
 
