@@ -11,7 +11,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         API_KEY='test',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'ep-tracker.sqlite'),
         ALLOW_CORS=None,
     )
 
