@@ -15,16 +15,17 @@
       </div>
       <b-field label="API URL">
         <b-input
-          :disabled="!isRemote"
+          :disabled="isDisabled"
           v-model="url"
           type="url"
         />
       </b-field>
       <b-field label="API Key">
         <b-input
-          :disabled="!isRemote"
+          :disabled="isDisabled"
           v-model="key"
-          type="text"
+          type="password"
+          password-reveal
         />
       </b-field>
       <b-field grouped>
@@ -51,8 +52,13 @@ export default {
     prefill: Object,
   },
   data() {
-    const { isRemote = false, url = '', key = '' } = this.prefill;
-    return { isRemote, url, key };
+    const { isRemote = false, url = '' } = this.prefill;
+    return { isRemote, url, key: '' };
+  },
+  computed: {
+    isDisabled() {
+      return !this.isRemote || process.env.VUE_APP_DISABLE_API_FORM;
+    },
   },
   methods: {
     handleSubmit() {

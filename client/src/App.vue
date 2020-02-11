@@ -50,6 +50,7 @@ const DEFAULT_SETTINGS = {
   isRemote: false,
   url: '',
   key: '',
+  ...JSON.parse(process.env.VUE_APP_API || '{}'),
 };
 
 export default {
