@@ -20,15 +20,15 @@ export default (url, key) => {
     headers,
   })
     .then(responseHandler)
-    .then(response => response.json());
+    .then((response) => response.json());
 
-  const addShow = info => fetch(url, {
+  const addShow = (info) => fetch(url, {
     method: 'POST',
     headers,
     body: JSON.stringify(info),
   }).then(responseHandler);
 
-  const deleteShow = id => fetch(`${url}/${id}`, {
+  const deleteShow = (id) => fetch(`${url}/${id}`, {
     method: 'DELETE',
     headers,
   }).then(responseHandler);

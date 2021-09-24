@@ -13,20 +13,20 @@ export default () => {
 
   const getShows = () => new Promise((resolve) => { resolve([...shows]); });
 
-  const addShow = info => new Promise((resolve) => {
+  const addShow = (info) => new Promise((resolve) => {
     shows.push({ id: uuid(), ...info });
     saveShows();
     resolve();
   });
 
-  const deleteShow = id => new Promise((resolve) => {
-    shows = shows.filter(show => show.id !== id);
+  const deleteShow = (id) => new Promise((resolve) => {
+    shows = shows.filter((show) => show.id !== id);
     saveShows();
     resolve();
   });
 
   const editShow = (id, info) => new Promise((resolve) => {
-    const idx = shows.findIndex(show => show.id === id);
+    const idx = shows.findIndex((show) => show.id === id);
     shows[idx] = { ...shows[idx], ...info };
     saveShows();
     resolve();
