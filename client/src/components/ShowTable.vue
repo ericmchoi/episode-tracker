@@ -2,7 +2,7 @@
   <b-table
     class="show-table"
     :data="showData"
-    :columns="showData.length ? [] : $options.columns"
+    :columns="showData.length ? undefined : $options.columns"
     detailed
     detail-key="id"
     custom-row-key="id"
